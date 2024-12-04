@@ -10,6 +10,14 @@ export interface Champion {
       magic: number;
       difficulty: number;
     };
+    tags: string;
+    stats: {
+      hp: number;
+      attackdamage: number;
+      mp: number;
+      armor: number;
+      spellblock: number;
+    }
   }
   
   export interface ChampionsResponse {
