@@ -1,49 +1,45 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import type { PayloadAction } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { ChampionsState, ChampionsResponse } from "./types";
 
-export interface championsState {
-  data: [] | null,
-  loading: boolean,
-  error: string | null, 
-}
-
-const API_KEY = "?api_key=RGAPI-c4ed5a70-777e-48d9-8ce4-84cb6fc712ea";
-
-const initialState: championsState = {
-  data: [],
+const initialState: ChampionsState = {
+  data: null,
   loading: false,
-  error: "",
+  error: null,
 }
 
-export const getAllChampions = createAsyncThunk("champions", async() => {
-  const response = await fetch("https://ddragon.leagueoflegends.com/cdn/14.23.1/data/en_US/champion.json" + API_KEY)
+const API_KEY = "RGAPI-c4ed5a70-777e-48d9-8ce4-84cb6fc712ea";
+
+export const getAllChampions = createAsyncThunk("champions/getAllChampions", async () => {
+  const response = await fetch(
+    `https://ddragon.leagueoflegends.com/cdn/14.23.1/data/en_US/champion.json?api_key=${API_KEY}`
+  );
   if (!response.ok) {
-      throw new Error('Network response was not ok');
+    throw new Error("Network response was not ok");
   }
   const data = await response.json();
-  return data;
-})
+  return data as ChampionsResponse;
+});
 
 export const championsSlice = createSlice({
-  name: 'champions',
+  name: "champions",
   initialState,
   reducers: {},
-  extraReducers(builder){
+  extraReducers: (builder) => {
     builder
-    .addCase(getAllChampions.pending,(state) => {
-        state.loading = true
-    })
-    .addCase(getAllChampions.fulfilled,(state, action: PayloadAction<any>) => {
+      .addCase(getAllChampions.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getAllChampions.fulfilled, (state, action: PayloadAction<ChampionsResponse>) => {
         state.loading = false;
         state.error = null;
-        state.data = action.payload
-    })
-    .addCase(getAllChampions.rejected,(state, action: PayloadAction<any>) => {
+        state.data = action.payload;
+      })
+      .addCase(getAllChampions.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
-        state.data = []
-    })
-  }
-})
+        state.error = action.error?.message || "Failed to fetch champions";
+        state.data = null;
+      });
+  },
+});
 
-export default championsSlice.reducer
+export default championsSlice.reducer;
