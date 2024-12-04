@@ -3,7 +3,7 @@ import championsReducer from "../app/features/championsSlice"
 
 export const store = configureStore({
   reducer: {
-    champions: championsReducer
+    champions: championsReducer,
   },
 })
 
