@@ -1,9 +1,16 @@
-import { useGetChampionQuery } from "@/app/api/apiSlice"
+import { useEffect } from 'react';
+
+import { useAppDispatch, useAppSelector } from "../app/hooks"
+import { getAllChampions } from "../app/features/championsSlice";
 
 export const Data = () => {
-    // const { data: allChampionsData } = useGetAllChampionsQuery();
-    const { data: championData } = useGetChampionQuery("Aatrox");
+    const dispatch = useAppDispatch()
 
-    console.log(championData, 'data')
+    const champions = useAppSelector(state => state.champions.data)
+    useEffect(() => {
+    dispatch(getAllChampions())
+    },[dispatch])
+
+    console.log(champions)
     return <div>Data:</div>;
 }
