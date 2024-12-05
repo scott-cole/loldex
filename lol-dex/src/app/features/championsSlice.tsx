@@ -9,9 +9,11 @@ const initialState: ChampionsState = {
 
 const API_KEY = "RGAPI-c4ed5a70-777e-48d9-8ce4-84cb6fc712ea";
 
+export const BASE_URL = "https://ddragon.leagueoflegends.com/cdn/12.4.1"
+
 export const getAllChampions = createAsyncThunk("champions/getAllChampions", async () => {
   const response = await fetch(
-    `https://ddragon.leagueoflegends.com/cdn/14.23.1/data/en_US/champion.json?api_key=${API_KEY}`
+    `${BASE_URL}/data/en_US/champion.json?api_key=${API_KEY}`
   );
   if (!response.ok) {
     throw new Error("Network response was not ok");
